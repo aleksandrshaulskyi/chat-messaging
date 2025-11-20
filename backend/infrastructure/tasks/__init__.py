@@ -1,0 +1,2 @@
+from infrastructure.tasks.consume_from_rabbitmq import consume_from_rabbitmq
+from infrastructure.tasks.process_messages import process_messages

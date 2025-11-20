@@ -1,0 +1,2 @@
+from interface_adapters.outgoing_dtos.chat import ChatOUTDTO
+from interface_adapters.outgoing_dtos.message import OutgoingMessageDTO

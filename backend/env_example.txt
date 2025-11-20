@@ -1,0 +1,18 @@
+#SECURITY
+KEY=The key that will be used to decode the JWT issued by authentication service. Should be the same to the one that was used to encode them.
+ALGORITHM=The algorithm that was used to encode JWT.
+
+#DATABASE
+MONGO_URL=The url to connect to the MongoDB database.
+MONGO_DATABASE_NAME=The name of the database in the MongoDB.
+MONGO_INITDB_ROOT_USERNAME=Root username
+MONGO_INITDB_ROOT_PASSWORD=Root password
+
+#RABBITMQ
+RABBITMQ_URL=RabbitMQ URL.
+WEBSOCKETS_EXCHANGE_NAME=Name of RabbitMQ exchange. It is defined in definitions.json in another repository (chat-shared-services).
+DATABASE_EXCHANGE_NAME=Name of RabbitMQ exchange. It is defined in definitions.json in another repository (chat-shared-services).
+DATABASE_QUEUE_NAME=Name of the queue that is intended to contain messages sent from the transportation microservice to this microservice.
+
+You should delete or rename the last three variables if you use this microservice without other services of the chat system.
+Should you do so modify the settings file in the backend directory as well.

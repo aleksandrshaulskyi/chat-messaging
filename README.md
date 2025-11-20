@@ -1,13 +1,14 @@
-# Chat-auth.
+# Chat-messaging.
 
-The authentication microservice for the distributed chat system.
+The messaging microservice for the distributed chat system.
 
 ## Brief.
 
-This microservice is generally responsible for everything that is related to
-authentication process. The authentication is based on the stateless approach
-using JSON web tokens. That said, we utilize both full advantage of the stateless
-tokens and it's main disadvantage - unability to revoke an issued token immediately.
+This microservice is intended to do all the heavy lifting tasks which are related to messages.
+It consumes messages from RabbitMQ and then validates, enforces authorization policies
+(PEP, PIP, PDP are all situated here), stores them into the database and publishes them back
+to the RabbitMQ in order to be dispatched to the users later. Aside of that this service also works
+with REST providing vital functionality for the whole system.
 
 ## Stage.
 This service is in the stage of active development. Updates are released multiple times a week.
@@ -15,13 +16,13 @@ This service is in the stage of active development. Updates are released multipl
 ## Features.
 This microservice operates with the two domain entities:
 
-1) Session
-2) User
+1) Chat
+2) Message
 
-Thus it provides all that is required to work with them.
+It works both via AMQP and REST.
 
-1) Create/Refresh/Terminate sessions.
-2) CRU (Deleting is not yet released) operations with User.
+The first one is intended to handle the real-time communication while the second one serves
+the data that is needed on request basis.
 
 ## Architecture.
 
@@ -38,7 +39,7 @@ It consists of 4 layers which are:
 1) Clone the repository.
 2) Create .env file in the backed directory using the env_example.txt as an example.
 3) ```docker-compose up --build``` in the directory where docker-compose.yaml file is located.
-4) The application will be available on **http://localhost:8000**
+4) The application will be available on **http://localhost:8002**
 
 ## Recent updates.
 
@@ -46,7 +47,7 @@ None yet released.
 
 ## Docs.
 
-Available at the standard FastAPI docs endpoint **http://localhost:8000/docs**
+Available at the standard FastAPI docs endpoint **http://localhost:8002/docs**
 
 ## Back to Index repository of the whole chat system.
 

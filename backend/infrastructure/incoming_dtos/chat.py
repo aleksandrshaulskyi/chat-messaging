@@ -19,5 +19,4 @@ class UpdateChatRelatedUser(BaseModel):
     """
     id: int
     username: str = Field(..., min_length=settings.min_username_length)
-    email: str
     avatar_url: str

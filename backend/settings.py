@@ -28,6 +28,9 @@ class Settings(BaseSettings):
     #CORS
     cors_origins: list = ['http://localhost:3000']
 
+    #METRICS
+    opentelemetry_collector_url: str = Field(validation_alias='OPENTELEMETRY_COLLECTOR_URL')
+
     model_config = {
         'env_file': '.env',
         'extra': 'allow',

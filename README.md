@@ -43,24 +43,17 @@ It consists of 4 layers which are:
 
 ## Recent updates.
 
-**24.11.2025**
+**01.12.2025**
 
 **Major**
 
-Added the monitoring of some vital metrics such as:
-1) The amount of the requests per second.
-2) Latency for 95% and 99% of requests.
-3) The amount of the requests that were responded with 4xx or 5xx status codes.  
+1) Added logging using probably the most classic stack for such purposes - ELK and Filebeat.
 
-This was implemented using the popular monitoring stack of **Opentelemetry** | **Prometheus** | **Grafana**.
+> Note that in probably 90% of times I would stick to Open Telemetry | Prometheus | Grafana | Loki stack.
+> It's much easier, more modern and in the most cases you would already use it
+> as your monitoring/tracing solution.
 
-**More information here:** https://github.com/aleksandrshaulskyi/chat-monitoring.
-
-**Minor**
-
-Added small fixes.
-
-**Pull request:** https://github.com/aleksandrshaulskyi/chat-messaging/pull/1
+2) Created centralized exception handlers.
 
 ## Docs.
 

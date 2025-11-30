@@ -1,6 +1,6 @@
-from bson import ObjectId
+from logging import getLogger
 
-from pymongo import ReturnDocument
+from settings import settings
 
 from application.exceptions import ChatCreationDeniedException
 from application.ports import ChatRepositoryPort, GetUsersInfoPort
@@ -32,6 +32,7 @@ class CreateChatUseCase:
         self.create_chat_data = create_chat_data
         self.database_repo = database_repo
         self.users_info_port = users_info_port
+        self.logger = getLogger(settings.chats_logger_name)
 
     def enforce_permission_policy(self) -> None:
         """
@@ -43,6 +44,10 @@ class CreateChatUseCase:
         related_user_ids = self.create_chat_data.get('user_ids')
 
         if self.user_id not in related_user_ids:
+            self.logger.error(
+                'User attempted to create a chat that he is not related to.',
+                extra={'user_id': self.user_id, 'event_type': 'Unrelated user creates chat.'}
+            )
             raise ChatCreationDeniedException(
                 title='Chat creation is denied.',
                 details={'Authorization error.': 'You are not permitted to create such chat.'}
@@ -63,7 +68,7 @@ class CreateChatUseCase:
             'filter': {'related_users': related_users},
             'update': {'$setOnInsert': chat.representation},
             'upsert': True,
-            'return_document': ReturnDocument.AFTER,
+            'return_document': 2,
         }
         
     async def get_users_information(self) -> list:

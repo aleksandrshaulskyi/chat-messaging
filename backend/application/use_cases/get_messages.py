@@ -1,12 +1,7 @@
-
-
-
-
-
-
-
-
 from bson import ObjectId
+from logging import getLogger
+
+from settings import settings
 
 from application.exceptions import MessagesRetrievalDeniedException
 from application.outgoing_dtos import OutgoingMessagesDTO
@@ -41,6 +36,7 @@ class GetMessagesUseCase:
         self.cursor = cursor
         self.chats_repo = chats_repo
         self.messages_repo = messages_repo
+        self.logger = getLogger(settings.chats_logger_name)
 
     def make_filters(self) -> dict:
         """
@@ -72,6 +68,10 @@ class GetMessagesUseCase:
         related_users = requested_chat and requested_chat.get('related_users')
 
         if not any({related_user.get('id') == self.user_id for related_user in related_users}):
+            self.logger.error(
+                'An attempt to retrieve messages of a chat that request user is not related to.',
+                extra={'user_id': self.user_id, 'event_type': 'Messages requested by unrelated user.'}
+            )
             raise MessagesRetrievalDeniedException(
                 title='Message retrieval is denied.',
                 details={'Authorization error': 'You are not permitted to retrieve the messages of this chat.'},

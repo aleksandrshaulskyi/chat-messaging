@@ -1,0 +1,3 @@
+from infrastructure.exception_handlers.application_exceptions_handler import application_exception_handler
+
+from infrastructure.exception_handlers.main import setup_exception_handlers

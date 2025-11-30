@@ -31,6 +31,9 @@ class Settings(BaseSettings):
     #METRICS
     opentelemetry_collector_url: str = Field(validation_alias='OPENTELEMETRY_COLLECTOR_URL')
 
+    #LOGGING
+    chats_logger_name: str = 'application.chats'
+
     model_config = {
         'env_file': '.env',
         'extra': 'allow',

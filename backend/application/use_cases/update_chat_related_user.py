@@ -6,6 +6,10 @@
 
 
 
+from logging import getLogger
+
+from settings import settings
+
 from application.exceptions import ChatUpdatingDeniedException
 from application.ports import ChatRepositoryPort
 
@@ -27,6 +31,7 @@ class UpdateChatUserUseCase:
         self.user_data = user_data
         self.user_id = user_id
         self.database_repo = database_repo
+        self.logger = getLogger(settings.chats_logger_name)
 
     def enforce_authorization_policy(self) -> None:
         """
@@ -37,6 +42,10 @@ class UpdateChatUserUseCase:
             whos information is being updated.
         """
         if self.user_id != self.user_data.get('id'):
+            self.logger.error(
+                'A user attempted to update another user.',
+                extra={'user_id': self.user_id, 'event_type': 'User attempted to updated another user information.'},
+            )
             raise ChatUpdatingDeniedException(
                 title='Chat updating is denied.',
                 details={'Chat updating is denied.': 'You are not permitted to update the chats with such info.'}

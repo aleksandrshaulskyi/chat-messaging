@@ -1,3 +1,7 @@
+from logging import getLogger
+
+from settings import settings
+
 from json import JSONDecodeError, loads
 
 
@@ -14,6 +18,7 @@ class RabbitMQDecoder:
             messages: A message from RabbitMQ in the bytes form.
         """
         self.message = message
+        self.logger = getLogger(settings.chats_logger_name)
 
     async def execute(self) -> dict:
         """
@@ -27,11 +32,17 @@ class RabbitMQDecoder:
         """
         try:
             self.message = self.message.decode('utf-8')
-        except (AttributeError, LookupError, TypeError, UnicodeDecodeError):
-            pass
+        except AttributeError:
+            self.logger.error(
+                f'Problem with message decoding: {self.message}',
+                extra={'user_id': None, 'event_type': 'Message decoding error.'},
+            )
         else:
 
             try:
                 return loads(self.message)
             except JSONDecodeError:
-                pass
+                self.logger.error(
+                    f'Problem with message json parsing: {self.message}',
+                    extra={'user_id': None, 'event_type': 'Message json parsing error.'},
+                )

@@ -1,64 +1,71 @@
 # Chat-messaging.
 
-The messaging microservice for the distributed chat system.
+##Message persistence, validation, authorization & event publishing##
 
-## Brief.
+This microservice performs all core operations related to message lifecycle in the distributed chat system — from ingestion to persistence to event publishing. It is the backbone of message flow.
 
-This microservice is intended to do all the heavy lifting tasks which are related to messages.
-It consumes messages from RabbitMQ and then validates, enforces authorization policies
-(PEP, PIP, PDP are all situated here), stores them into the database and publishes them back
-to the RabbitMQ in order to be dispatched to the users later. Aside of that this service also works
-with REST providing vital functionality for the whole system.
+## 🚀 Overview
 
-## Stage.
-This service is in the stage of active development. Updates are released multiple times a week.
+```chat-messaging``` is responsible for all heavy-duty backend tasks related to chat messages.
+It consumes events from RabbitMQ, applies strict validation and authorization logic, stores messages in a dedicated database, and publishes resulting events back to RabbitMQ for further delivery to users via the transportation layer.
 
-## Features.
-This microservice operates with the two domain entities:
+In addition to event-driven flows, this service exposes a REST API used by the frontend and other services for fetching chats, messages and providing essential data for the system.
 
-1) Chat
-2) Message
+## 🧩 Features
 
-It works both via AMQP and REST.
+- Consume messages from RabbitMQ
+- Validate payload
+- Enforce authorization policies (PEP / PIP / PDP live inside this service)
+- Get-or-create chat records when needed
+- Persist messages to MongoDB
+- Assign per-chat sequence numbers
+- Publish MessageCreated events back to RabbitMQ (transactional outbox)
+- Provide REST endpoints for chats and messages retrieval
 
-The first one is intended to handle the real-time communication while the second one serves
-the data that is needed on request basis.
+This service performs the main business logic of the entire chat system.
 
-## Architecture.
+## 🧠 Domain Model
 
-This microservice is built using the Clean Architecture approach.
-It consists of 4 layers which are:
+This microservice manages two domain entities:
 
-1) Domain (entities, value objects)
-2) Application layer (domain entities orchestration and business logic)
-3) Interface adapters (thin transport layer that incapsulates the internal logic)
-4) Infrastructure (frameworks, databases, etc.)
+- **Chat**
+- **Message**
 
-## Usage.
+AMQP is used for real-time message flow, while REST serves on-demand operations (fetch history, chat info, etc.).
 
-1) Clone the repository.
-2) Create .env file in the backed directory using the env_example.txt as an example.
-3) ```docker-compose up --build``` in the directory where docker-compose.yaml file is located.
-4) The application will be available on **http://localhost:8002**
+## 🏛️ Architecture
 
-## Recent updates.
+This service is built using Clean Architecture with clear boundaries between layers:
 
-**01.12.2025**
+- Domain
+Entities, value objects, domain rules
 
-**Major**
+- Application Layer
+Use-cases, orchestration, business logic
 
-1) Added logging using probably the most classic stack for such purposes - ELK and Filebeat.
+- Interface Adapters
+Controllers, DTO mappers
 
-> Note that in probably 90% of times I would stick to Open Telemetry | Prometheus | Grafana | Loki stack.
-> It's much easier, more modern and in the most cases you would already use it
-> as your monitoring/tracing solution.
+- Infrastructure
+Databases, framework integrations, message brokers
 
-2) Created centralized exception handlers.
+This separation keeps the core logic framework-agnostic and fully testable.
 
-## Docs.
+## ⚙️ Usage
 
-Available at the standard FastAPI docs endpoint **http://localhost:8002/docs**
+1) Clone the repository
+2) Create a .env file inside the backend directory using env_example.txt
+3) The example contains no sensitive values — you may copy it as-is
+4) Run the service: ```docker-compose up --build```
 
-## Back to Index repository of the whole chat system.
+After startup, the service is available at:
+
+👉 http://localhost:8002
+
+REST documentation (FastAPI Swagger UI):
+
+👉 http://localhost:8002/docs
+
+## 🔗 Back to the Main Index Repository
 
 https://github.com/aleksandrshaulskyi/chat-index

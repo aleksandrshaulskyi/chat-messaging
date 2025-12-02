@@ -37,20 +37,16 @@ AMQP is used for real-time message flow, while REST serves on-demand operations 
 
 This service is built using Clean Architecture with clear boundaries between layers:
 
-- Domain
-- 
+- Domain  
 Entities, value objects, domain rules
 
-- Application Layer
-- 
+- Application Layer  
 Use-cases, orchestration, business logic
 
-- Interface Adapters
-- 
+- Interface Adapters  
 Controllers, DTO mappers
 
-- Infrastructure
-- 
+- Infrastructure  
 Databases, framework integrations, message brokers
 
 This separation keeps the core logic framework-agnostic and fully testable.

@@ -1,6 +1,6 @@
 # Chat-messaging.
 
-** Message persistence, validation, authorization & event publishing **
+**Message persistence, validation, authorization & event publishing**
 
 This microservice performs all core operations related to message lifecycle in the distributed chat system — from ingestion to persistence to event publishing. It is the backbone of message flow.
 

@@ -37,7 +37,7 @@ class MessagesRepositoryPort(ABC):
         ...
 
     @abstractmethod
-    async def update_id(self, _id: str) -> None:
+    async def update_id(self, _id: str) -> dict | None:
         """
         Set the string 'id' field of an existing message.
 

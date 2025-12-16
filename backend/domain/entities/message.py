@@ -71,7 +71,7 @@ class Message:
             Message: A new Message object.
         """
         return Message(
-            id=None,
+            id=message_data.get('id'),
             client_message_id=message_data.get('client_message_id'),
             chat_id=message_data.get('chat_id'),
             sender_id=message_data.get('sender_id'),

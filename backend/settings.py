@@ -21,10 +21,11 @@ class Settings(BaseSettings):
 
     #RABBITMQ
     rabbitmq_url: str = Field(validation_alias='RABBITMQ_URL')
-    websockets_exchange_name: str = Field(validation_alias='WEBSOCKETS_EXCHANGE_NAME')
+    delivery_exchange_name: str = Field(validation_alias='DELIVERY_EXCHANGE_NAME')
     database_exchange_name: str = Field(validation_alias='DATABASE_EXCHANGE_NAME')
     database_queue_name: str = Field(validation_alias='DATABASE_QUEUE_NAME')
-    
+    channel_prefetch_messages_count: int = 16
+
     #CORS
     cors_origins: list = ['http://localhost:3000']
 

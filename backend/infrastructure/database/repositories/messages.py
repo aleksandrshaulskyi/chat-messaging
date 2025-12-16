@@ -1,6 +1,7 @@
 from bson import ObjectId
 
 from motor.motor_asyncio import AsyncIOMotorCollection
+from pymongo import ReturnDocument
 
 from settings import settings
 
@@ -52,14 +53,18 @@ class MessagesRepository(MessagesRepositoryPort):
         result = await self.collection.insert_one(document=message)
         return str(result.inserted_id)
 
-    async def update_id(self, _id: str) -> None:
+    async def update_id(self, _id: str) -> dict | None:
         """
         Set the string 'id' field on a message document.
 
         Args:
             _id (str): The ObjectId (as string) that will be written into the 'id' field.
         """
-        await self.collection.update_one({'_id': ObjectId(_id)}, {'$set': {'id': _id}})
+        return await self.collection.find_one_and_update(
+            {'_id': ObjectId(_id)},
+            {'$set': {'id': _id}},
+            return_document=ReturnDocument.AFTER,
+        )
 
     async def get_chat_messages(self, filters: dict) -> list:
         """

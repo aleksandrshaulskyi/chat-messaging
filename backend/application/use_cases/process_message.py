@@ -1,14 +1,6 @@
-
-
-
-
-
-
-
-
 from application.ports import ChatRepositoryPort, MessagesRepositoryPort, RabbitMQManagerPort
 from domain.entities import Message
-from domain.value_objects import MessageStatus, RejectReason
+from domain.value_objects import RejectReason
 
 
 class ProcessMessageUseCase:
@@ -121,7 +113,9 @@ class ProcessMessageUseCase:
         """
         inserted_id = await self.messages_repo.create_message(message=self.message.representation)
 
-        await self.messages_repo.update_id(_id=inserted_id)
+        processed_message_data = await self.messages_repo.update_id(_id=inserted_id)
+
+        self.message = Message.create(message_data=processed_message_data)
 
     async def increment_messages_count(self) -> None:
         """
@@ -133,9 +127,4 @@ class ProcessMessageUseCase:
         """
         Send a message to the RabbitMQ exchange for further dispatching.
         """
-        if self.message.status == MessageStatus.REJECTED:
-            routing_key = str(self.message.sender_id)
-        else:
-            routing_key = str(self.message.recipient_id)
-
-        await self.rabbitmq_manager.send_message(message_data=self.message.representation, routing_key=routing_key)
+        await self.rabbitmq_manager.send_message(message_data=self.message.representation)
